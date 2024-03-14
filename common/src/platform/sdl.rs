@@ -36,8 +36,8 @@ pub fn sdl_main<A: Application>(mut app: A) -> Result<(), String> {
         .map_err(|e| e.to_string())?;
     let texture_creator = canvas.texture_creator();
 
-    let surface_width = 1920 / 3;
-    let surface_height = 1080 / 3;
+    let surface_width = 1600 / 2;
+    let surface_height = 1000 / 2;
 
     canvas.set_draw_color(sdl2::pixels::Color::RGBA(255, 255, 255, 255));
 

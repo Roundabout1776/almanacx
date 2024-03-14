@@ -78,8 +78,11 @@ pub unsafe fn init_application<A: Application>(mut app: A) {
     let atom = RegisterClassW(&window_class);
     debug_assert!(atom != 0);
 
-    let screen_width = GetSystemMetrics(SM_CXSCREEN);
-    let screen_height = GetSystemMetrics(SM_CYSCREEN);
+    let window_width = 1600;
+    let window_height = 1000;
+
+    let display_width = GetSystemMetrics(SM_CXSCREEN);
+    let display_height = GetSystemMetrics(SM_CYSCREEN);
 
     let mut user_data: Win32UserData = std::mem::zeroed();
     user_data.bitmap_info.bmiHeader.biSize = mem::size_of::<BITMAPINFOHEADER>() as u32;
@@ -99,14 +102,16 @@ pub unsafe fn init_application<A: Application>(mut app: A) {
         WS_POPUP | WS_VISIBLE,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
-        screen_width,
-        screen_height,
+        window_width,
+        window_height,
         0,
         0,
         instance,
         user_data_ptr as *const c_void,
     );
     debug_assert!(window_handle != 0);
+
+    SetWindowPos(window_handle, 0, (display_width - window_width)/2, (display_height - window_height)/2, 0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_SHOWWINDOW);
 
     let mut previous = Instant::now();
     let mut accumulator: f32 = 0.0;
@@ -167,8 +172,8 @@ unsafe fn get_window_dimensions(window: HWND) -> (i32, i32) {
 }
 
 unsafe fn resize_surface(data: &mut Win32UserData, window_width: i32, window_height: i32) {
-    data.bitmap_info.bmiHeader.biWidth = window_width / 3;
-    data.bitmap_info.bmiHeader.biHeight = -window_height / 3;
+    data.bitmap_info.bmiHeader.biWidth = window_width / 2;
+    data.bitmap_info.bmiHeader.biHeight = -window_height / 2;
 
     if !data.pixels.is_null() {
         VirtualFree(data.pixels as *mut c_void, 0, MEM_RELEASE);
