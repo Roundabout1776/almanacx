@@ -1,0 +1,16 @@
+[workspace]
+members = ["common", "almanacx", "quill"]
+default-members = ["almanacx"]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+
+[workspace.dependencies]
+cgmath = "0.18.0"
+
+[profile.dev]
+opt-level = 2
+
+[profile.dev.package."*"]
+opt-level = 3
